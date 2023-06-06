@@ -1,7 +1,7 @@
 const CrudTestController = require("../controllers/crud_test_controller");
-const router = require("express").Router();
+const CrudTestRoute = require("express").Router();
 
-router.post("/", CrudTestController.create);
-router.get("/", CrudTestController.getAll);
+CrudTestRoute.post("/", CrudTestController.create);
+CrudTestRoute.get('/', CrudTestController.getAll);
 
-module.exports = router;
+module.exports = CrudTestRoute;
