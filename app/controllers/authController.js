@@ -1,110 +1,258 @@
-const UsersService = require('../services/auth_service.js');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const userService = require("../services/userService");
+const passwordUtils = require("../utils/passwordUtils");
+const authUtils = require("../utils/authUtils");
 
-class UserController {
-  async createUser(req, res) {
-    try {
-      const { name, email, password } = req.body;
-      if (!name || !email || !password) {
-        return res.status(400).json({ error: 'Missing required fields' });
-      }
-      // check email exist in database
-      const emailExist = await UsersService.findOne({
-        where: { email: email },
-      });
-      if (emailExist) {
-        return res.status(400).json({
-          error: true,
-          message: 'Email already exists',
-        });
-      }
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(password, salt);
-      const data = {
-        name: name,
-        email: email,
-        password: hashedPassword,
-        role: 0,
-      };
-      const result = await UsersService.create(data);
-      res.status(201).json({
-        error: false,
-        message: 'User created',
-      });
-    } catch (error) {
-      res.status(500).json({
-        error: true,
-        message: error.message,
+exports.register = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    // Check email and password empty
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Email and password required",
+        data: {},
       });
     }
-  }
-
-  async Login(req, res) {
-    try {
-      const user = await UsersService.findAll({
-        where: { email: req.body.email },
+    // Validasi email format
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid email format",
+        data: {},
       });
-      const validPass = await bcrypt.compare(
-        req.body.password,
-        user[0].password
-      );
-      if (!validPass)
-        return res.status(400).json({ error: 'Invalid password' });
-      const userId = user[0].id;
-      const name = user[0].name;
-      const email = user[0].email;
-      const accessToken = jwt.sign(
-        { userId, name, email },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30d' }
-      );
-      // const refreshToken = jwt.sign(
-      //   { userId, name, email },
-      //   process.env.REFRESH_TOKEN_SECRET,
-      //   { expiresIn: '1d' }
-      // );
-      await UsersService.update(
-        { refresh_Token: accessToken },
-        { where: { id: userId } }
-      );
-      res.json({
-        error: false,
-        message: 'successfully logged in',
-        login_result: {
-          userId: userId,
-          name: name,
-          email: email,
-          accessToken: accessToken,
-        },
-      });
-    } catch (error) {
-      res.status(404).json({ msg: 'email not found' });
     }
-  }
-
-  async Logout(req, res) {
-    try {
-      const refreshToken = req.cookies.refreshToken;
-      if (!refreshToken) return res.status(204);
-      const user = await UsersService.getAll({
-        where: { refresh_Token: refreshToken },
+    // Check password format
+    const isPasswordFormatValid = await passwordUtils.checkPasswordFormat(
+      password
+    );
+    if (!isPasswordFormatValid) {
+      return res.status(400).json({
+        status: "error",
+        message:
+          "Password must be at least 8 characters long, contain uppercase, lowercase, number and symbol",
+        data: {},
       });
-      if (!user[0]) return res.status(204);
-      const userId = user[0].id;
-      await UsersService.update(
-        { refresh_Token: null },
-        { where: { id: userId } }
-      );
-      res.clearCookie('refreshToken');
-      res.status(200).json({
-        error: false,
-        msg: 'User logged out',
-      });
-    } catch (error) {
-      res.status(500).json({ error });
     }
-  }
-}
+    //check if email already registered
+    const user = await userService.getUserByEmail(email);
+    if (user) {
+      return res.status(400).json({
+        status: "error",
+        message: "Email already registered",
+        data: {},
+      });
+    }
+    // hash password
+    const hashedPassword = await passwordUtils.hashPassword(password);
+    const roleId = 1;
 
-module.exports = new UserController();
+    const newUser = await userService.newUser({
+      roleId: roleId,
+      name: name,
+      email: email,
+      password: hashedPassword,
+    });
+    res.status(201).json({
+      status: "success",
+      message: "User created successfully",
+      data: newUser,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check email and password is not empty'
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Email and password is required",
+        data: {},
+      });
+    }
+    // check if email already exist
+    const user = await userService.getUserByEmail(email);
+    if (!user) {
+      return res.status(400).json({
+        status: "error",
+        message: "Email is not exist",
+        data: {},
+      });
+    }
+    // check password
+    const isMatch = await passwordUtils.comparePasswords(
+      password,
+      user.password
+    );
+    if (!isMatch) {
+      return res.status(400).json({
+        status: "error",
+        message: "Password is incorrect",
+        data: {},
+      });
+    }
+    // generate token
+    const token = await authUtils.generateToken(user);
+
+    res.status(200).json({
+      status: "success",
+      message: "User login successfully",
+      data: {
+        token: token,
+        user: user,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
+// just check token
+exports.checkToken = async (req, res) => {
+  try {
+    res.status(200).json({
+      status: "success",
+      message: "User login successfully",
+      data: {
+        user: req.user,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
+exports.logout = async (req, res) => {
+  try {
+    res.status(200).json({
+      status: "success",
+      message: "User logout successfully",
+      data: {},
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
+
+//reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { password, token } = req.body;
+
+    // check password is not empty
+    if (!password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Password is required",
+        data: {},
+      });
+    }
+
+    // check password format
+    const isPasswordFormatValid = await passwordUtils.checkPasswordFormat(
+      password
+    );
+    if (!isPasswordFormatValid) {
+      return res.status(400).json({
+        status: "error",
+        message: "Password format is invalid",
+        data: {},
+      });
+    }
+
+    // check token is not empty
+    if (!token) {
+      return res.status(400).json({
+        status: "error",
+        message: "Token is required",
+        data: {},
+      });
+    }
+
+    // decode token
+    const decoded = await authUtils.decodeToken(token);
+    if (!decoded) {
+      return res.status(400).json({
+        status: "error",
+        message: "Token is invalid",
+        data: {},
+      });
+    }
+
+    // get user by email
+    const user = await userService.getUserByEmail(decoded.email);
+    if (user.resetToken !== token) {
+      return res.status(400).json({
+        status: "error",
+        message: "Token is invalid",
+        data: {},
+      });
+    }
+
+    // hash password
+    const hashPassword = await passwordUtils.hashPassword(password);
+
+    // update password
+    await userService.updateUser(decoded.id, { password: hashPassword });
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successfully",
+      data: {},
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
+// logout
+exports.logout = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({
+        status: "error",
+        message: "Refresh token is required",
+        data: {},
+      });
+    }
+    const user = await userService.getUserRefreshToken(refreshToken);
+    if (!user) {
+      return res.status(204);
+    }
+    await userService.update({ id: user.id, resetToken: null });
+    res.clearCookie("refreshToken");
+    res.status(200).json({
+      status: "success",
+      message: "User logout successfully",
+      data: {},
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+      data: {},
+    });
+  }
+};
