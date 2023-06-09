@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       user.belongsTo(models.role, { foreignKey: "roleId" });
+      user.hasMany(models.jual_sampah, { foreignKey: "id_user" });
     }
   }
   user.init(
@@ -19,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       resetToken: DataTypes.STRING,
       roleId: DataTypes.INTEGER,
+      phone_number: DataTypes.STRING,
+      alamat: DataTypes.TEXT,
+      latitude: DataTypes.DOUBLE,
+      longitude: DataTypes.DOUBLE,
+      points: DataTypes.INTEGER,
+      saldo: DataTypes.INTEGER,
     },
     {
       sequelize,

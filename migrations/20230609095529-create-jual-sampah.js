@@ -2,33 +2,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("jual_sampahs", {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      name: {
         type: Sequelize.STRING,
-      },
-      email: {
-        type: Sequelize.STRING,
-      },
-      password: {
-        type: Sequelize.STRING,
-      },
-      resetToken: {
-        type: Sequelize.STRING,
-      },
-      roleId: {
-        type: Sequelize.INTEGER,
-      },
-      phone_number: {
-        type: Sequelize.STRING,
-      },
-      alamat: {
-        type: Sequelize.TEXT,
       },
       latitude: {
         type: Sequelize.DOUBLE,
@@ -36,10 +15,28 @@ module.exports = {
       longitude: {
         type: Sequelize.DOUBLE,
       },
-      points: {
+      id_sampah: {
         type: Sequelize.INTEGER,
       },
-      saldo: {
+      berat_sampah: {
+        type: Sequelize.INTEGER,
+      },
+      total_harga: {
+        type: Sequelize.INTEGER,
+      },
+      id_status: {
+        type: Sequelize.INTEGER,
+      },
+      id_user: {
+        type: Sequelize.INTEGER,
+      },
+      foto_sampah: {
+        type: Sequelize.STRING,
+      },
+      tanggal_pengambilan: {
+        type: Sequelize.DATE,
+      },
+      waktu: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
@@ -53,6 +50,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("jual_sampahs");
   },
 };
