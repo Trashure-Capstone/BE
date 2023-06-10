@@ -1,6 +1,7 @@
 const userService = require("../services/userService");
 const passwordUtils = require("../utils/passwordUtils");
 const authUtils = require("../utils/authUtils");
+const roleService = require("../services/roleService");
 
 exports.register = async (req, res) => {
   try {
@@ -101,7 +102,6 @@ exports.login = async (req, res) => {
     }
     // generate token
     const token = await authUtils.generateToken(user);
-
     res.status(200).json({
       status: "success",
       message: "User login successfully",
