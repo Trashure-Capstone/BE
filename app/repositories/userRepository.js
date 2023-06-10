@@ -2,16 +2,7 @@ const { user, role } = require("../models");
 
 class UserRepository {
   async getUserById(id) {
-    return (
-      user.findByPk(id),
-      {
-        include: [
-          {
-            model: role,
-          },
-        ],
-      }
-    );
+    return user.findOne({ where: { id } });
   }
   async getUserByEmail(email) {
     return user.findOne({
