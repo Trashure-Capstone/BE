@@ -1,31 +1,28 @@
-'use strict';
 const { Storage } = require('@google-cloud/storage');
-const fs = require('fs');
-const dateFormat = require('dateformat');
 const path = require('path');
 
 const pathKey = path.resolve('./serviceaccountkeys.json');
 
 // TODO: Sesuaikan konfigurasi Storage
 const gcs = new Storage({
-  projectId: 'submission-mgce-aliefrahman',
+  projectId: 'trashure-389107',
   keyFilename: pathKey,
 });
 
 // TODO: Tambahkan nama bucket yang digunakan
-const bucketName = 'tracker-money';
+const bucketName = 'trashurebucket';
 const bucket = gcs.bucket(bucketName);
 
 function getPublicUrl(filename) {
   return 'https://storage.googleapis.com/' + bucketName + '/' + filename;
-}
+};
 
 let ImgUpload = {};
 
-ImgUpload.uploadToGcs = (req, res, next) => {
+ImgUpload.uploadToGcs = (req, next) => {
   if (!req.file) return next();
 
-  const gcsname = dateFormat(new Date(), 'yyyymmdd-HHMMss');
+  const gcsname = Date.now() + '_' + req.file.originalname.split(' ').join('-');
   const file = bucket.file(gcsname);
 
   const stream = file.createWriteStream({
@@ -45,7 +42,9 @@ ImgUpload.uploadToGcs = (req, res, next) => {
     next();
   });
 
+  // Create a readable stream from the file data
   stream.end(req.file.buffer);
 };
+
 
 module.exports = ImgUpload;

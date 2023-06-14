@@ -8,5 +8,5 @@ module.exports = {
   DB_USERNAME: process.env.DB_USERNAME || "root",
   DB_PASSWORD: process.env.DB_PASSWORD || "",
   DB_DIALECT: process.env.DB_DIALECT || "mysql",
-  JWT_SECRET: process.env.JWT_SECRET || "secret",
+  JWT_SECRET: process.env.JWT_SECRET || "!Dfas1@3fa#4mFifafnuNDwm13nd23nFju@1",
 };

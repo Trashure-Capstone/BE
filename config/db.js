@@ -1,11 +1,11 @@
-require("dotenv").config();
+require('dotenv').config();
 const {
   DB_DATABASE,
   DB_USERNAME,
   DB_PASSWORD,
   DB_HOST,
   DB_DIALECT,
-} = require("./config");
+} = require('./config');
 
 module.exports = {
   development: {
@@ -16,17 +16,17 @@ module.exports = {
     dialect: process.env.DB_DIALECT || DB_DIALECT,
   },
   test: {
-    username: "root",
-    password: "",
-    database: "trashure",
-    host: "127.0.0.1",
-    dialect: "mysql",
+    username: 'root',
+    password: '',
+    database: 'trashure',
+    host: '127.0.0.1',
+    dialect: 'mysql',
   },
   production: {
-    username: "root",
-    password: "",
-    database: "trashure",
-    host: "127.0.0.1",
-    dialect: "mysql",
+    username: '',
+    password: '',
+    database: '',
+    host: '',
+    dialect: 'mysql',
   },
 };

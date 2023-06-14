@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({
         status: "error",
         message:
-          "Password must be at least 8 characters long, contain uppercase, lowercase, number and symbol",
+          "Password must be at least 8 characters long",
         data: {},
       });
     }
@@ -57,13 +57,11 @@ exports.register = async (req, res) => {
     res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: newUser,
     });
   } catch (err) {
     res.status(500).json({
       status: "error",
       message: err.message,
-      data: {},
     });
   }
 };
@@ -107,7 +105,6 @@ exports.login = async (req, res) => {
       message: "User login successfully",
       data: {
         token: token,
-        user: user,
       },
     });
   } catch (err) {

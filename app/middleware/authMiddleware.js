@@ -24,6 +24,7 @@ exports.verifyToken = (req, res, next) => {
   });
 };
 
+// ngecek super admin
 exports.verifySuperAdmin = (req, res, next) => {
   if (req.user.role !== "Super Admin") {
     return res.status(403).send({

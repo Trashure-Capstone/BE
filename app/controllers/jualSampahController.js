@@ -3,6 +3,14 @@ const jualSampahService = require("../services/jualSampahService");
 class JualSampahController {
   async createJualSampah(req, res) {
     try {
+      ImgUpload.uploadToGcs(req, res, (err) => {
+        if (err) {
+          // Handle the error
+          throw new Error('Failed to upload file');
+        }
+        req.body.foto_sampah = req.file.cloudStoragePublicUrl;
+      });
+
       const jualSampah = await jualSampahService.createJualSampah(req.body);
       res.status(201).json({
         status: "success add jual sampah",
