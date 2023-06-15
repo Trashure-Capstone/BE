@@ -6,6 +6,7 @@ class CrudTestController {
       const data = req.body;
       const result = await CruidService.create(data);
       res.status(201).json({
+        error: false,
         message: "Data created successfully",
         data: result,
       });
@@ -17,6 +18,7 @@ class CrudTestController {
     try {
       const result = await CruidService.getAll();
       res.status(200).json({
+        error: false,
         message: "Data retrieved successfully",
         data: result,
       });

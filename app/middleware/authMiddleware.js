@@ -24,6 +24,27 @@ exports.verifyToken = (req, res, next) => {
   });
 };
 
+exports.getUserByToken = (authHeader, res, next) => {
+  const token = authHeader && authHeader.split(' ')[1];
+
+  // check if token not exist
+  if (!authHeader) {
+    return res.status(403).send({
+      message: 'No token provided!',
+    });
+  }
+
+  // verify token
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: 'Unauthorized!',
+      });
+    }
+    authHeader.user = decoded;
+  });
+};
+
 // ngecek super admin
 exports.verifySuperAdmin = (req, res, next) => {
   if (req.user.role !== "Super Admin") {

@@ -2,22 +2,23 @@ const jualSampahRepository = require('../repositories/jualSampahRepository');
 const { generateSalesId } = require('../utils/generateId');
 const userRepository = require('../repositories/userRepository');
 const sampahRepository = require('../repositories/sampahRepository');
-const ImgUpload = require('../utils/uploadImg');
 
 class JualSampahService {
   async createJualSampah(data) {
     data.id = generateSalesId();
+
     const sampah = await sampahRepository.getSampahById(data.id_sampah);
     const jualSampah = await jualSampahRepository.createJualSampah({
       id: data.id,
       id_status: 1,
+      id_user: data.id_user,
       total_harga: data.berat_sampah * sampah.price,
       ...data,
     });
     return jualSampah;
   }
-  async getAllJualSampah() {
-    return await jualSampahRepository.getAllJualSampah();
+  async getAllJualSampah(id_user) {
+    return await jualSampahRepository.getAllJualSampah(id_user);
   }
   async getJualSampahById(id) {
     return await jualSampahRepository.getJualSampahById(id);

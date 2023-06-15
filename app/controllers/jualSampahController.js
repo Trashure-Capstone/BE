@@ -1,38 +1,19 @@
-const jualSampahService = require("../services/jualSampahService");
+const jualSampahService = require('../services/jualSampahService');
 
 class JualSampahController {
-  async createJualSampah(req, res) {
-    try {
-      ImgUpload.uploadToGcs(req, res, (err) => {
-        if (err) {
-          // Handle the error
-          throw new Error('Failed to upload file');
-        }
-        req.body.foto_sampah = req.file.cloudStoragePublicUrl;
-      });
-
-      const jualSampah = await jualSampahService.createJualSampah(req.body);
-      res.status(201).json({
-        status: "success add jual sampah",
-        data: jualSampah,
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: "failed add jual sampah",
-        message: err.message,
-      });
-    }
-  }
   async getAllJualSampah(req, res) {
     try {
-      const jualSampah = await jualSampahService.getAllJualSampah();
+      const id_user = req.user.id;
+      const jualSampah = await jualSampahService.getAllJualSampah(id_user);
       res.status(200).json({
-        status: "success get all jual sampah",
-        data: jualSampah,
+        error: false,
+        data: {
+          jualSampah,
+        },
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed get all jual sampah",
+        error: true,
         message: err.message,
       });
     }
@@ -43,12 +24,12 @@ class JualSampahController {
         req.params.id
       );
       res.status(200).json({
-        status: "success get jual sampah by id",
+        error: false,
         data: jualSampah,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed get jual sampah by id",
+        error: true,
         message: err.message,
       });
     }
@@ -60,12 +41,12 @@ class JualSampahController {
         req.body
       );
       res.status(200).json({
-        status: "success update jual sampah",
-        data: jualSampah,
+        error: false,
+        message: 'success update jual sampah',
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed update jual sampah",
+        error: true,
         message: err.message,
       });
     }
@@ -76,12 +57,12 @@ class JualSampahController {
         req.params.id
       );
       res.status(200).json({
-        status: "success delete jual sampah",
-        data: jualSampah,
+        error: false,
+        message: 'success delete jual sampah',
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed delete jual sampah",
+        error: true,
         message: err.message,
       });
     }

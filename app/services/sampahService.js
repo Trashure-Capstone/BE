@@ -10,9 +10,8 @@ class SampahService {
   async updateSampah(data, id) {
     return await sampahRepository.updateSampah(data, id);
   }
-
   async getSampahById(id) {
-    return await sampahRepository.findOne(id);
+    return await sampahRepository.getSampahById(id);
   }
 
   async deleteSampah(id) {

@@ -1,7 +1,7 @@
-const userService = require("../services/userService");
-const passwordUtils = require("../utils/passwordUtils");
-const authUtils = require("../utils/authUtils");
-const roleService = require("../services/roleService");
+const userService = require('../services/userService');
+const passwordUtils = require('../utils/passwordUtils');
+const authUtils = require('../utils/authUtils');
+const roleService = require('../services/roleService');
 
 exports.register = async (req, res) => {
   try {
@@ -9,8 +9,8 @@ exports.register = async (req, res) => {
     // Check email and password empty
     if (!email || !password) {
       return res.status(400).json({
-        status: "error",
-        message: "Email and password required",
+        status: 'error',
+        message: 'Email and password required',
         data: {},
       });
     }
@@ -18,8 +18,8 @@ exports.register = async (req, res) => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
-        status: "error",
-        message: "Invalid email format",
+        status: 'error',
+        message: 'Invalid email format',
         data: {},
       });
     }
@@ -29,9 +29,8 @@ exports.register = async (req, res) => {
     );
     if (!isPasswordFormatValid) {
       return res.status(400).json({
-        status: "error",
-        message:
-          "Password must be at least 8 characters long",
+        status: 'error',
+        message: 'Password must be at least 8 characters long',
         data: {},
       });
     }
@@ -39,8 +38,8 @@ exports.register = async (req, res) => {
     const user = await userService.getUserByEmail(email);
     if (user) {
       return res.status(400).json({
-        status: "error",
-        message: "Email already registered",
+        status: 'error',
+        message: 'Email already registered',
         data: {},
       });
     }
@@ -55,12 +54,12 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
     res.status(201).json({
-      status: "success",
-      message: "User created successfully",
+      status: 'success',
+      message: 'User created successfully',
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      status: 'error',
       message: err.message,
     });
   }
@@ -72,8 +71,8 @@ exports.login = async (req, res) => {
     // check email and password is not empty'
     if (!email || !password) {
       return res.status(400).json({
-        status: "error",
-        message: "Email and password is required",
+        status: 'error',
+        message: 'Email and password is required',
         data: {},
       });
     }
@@ -81,8 +80,8 @@ exports.login = async (req, res) => {
     const user = await userService.getUserByEmail(email);
     if (!user) {
       return res.status(400).json({
-        status: "error",
-        message: "Email is not exist",
+        status: 'error',
+        message: 'Email is not exist',
         data: {},
       });
     }
@@ -93,23 +92,23 @@ exports.login = async (req, res) => {
     );
     if (!isMatch) {
       return res.status(400).json({
-        status: "error",
-        message: "Password is incorrect",
+        status: 'error',
+        message: 'Password is incorrect',
         data: {},
       });
     }
     // generate token
     const token = await authUtils.generateToken(user);
     res.status(200).json({
-      status: "success",
-      message: "User login successfully",
+      status: 'success',
+      message: 'User login successfully',
       data: {
         token: token,
       },
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      status: 'error',
       message: err.message,
       data: {},
     });
@@ -119,15 +118,15 @@ exports.login = async (req, res) => {
 exports.checkToken = async (req, res) => {
   try {
     res.status(200).json({
-      status: "success",
-      message: "User login successfully",
+      error: false,
+      message: 'User login successfully',
       data: {
         user: req.user,
       },
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      error: true,
       message: err.message,
       data: {},
     });
@@ -136,13 +135,12 @@ exports.checkToken = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     res.status(200).json({
-      status: "success",
-      message: "User logout successfully",
-      data: {},
+      error: false,
+      message: 'User logout successfully',
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      error: true,
       message: err.message,
       data: {},
     });
@@ -157,9 +155,8 @@ exports.resetPassword = async (req, res) => {
     // check password is not empty
     if (!password) {
       return res.status(400).json({
-        status: "error",
-        message: "Password is required",
-        data: {},
+        error: true,
+        message: 'Password is required',
       });
     }
 
@@ -169,18 +166,16 @@ exports.resetPassword = async (req, res) => {
     );
     if (!isPasswordFormatValid) {
       return res.status(400).json({
-        status: "error",
-        message: "Password format is invalid",
-        data: {},
+        error: true,
+        message: 'Password format is invalid',
       });
     }
 
     // check token is not empty
     if (!token) {
       return res.status(400).json({
-        status: "error",
-        message: "Token is required",
-        data: {},
+        error: 'true',
+        message: 'Token is required',
       });
     }
 
@@ -188,9 +183,8 @@ exports.resetPassword = async (req, res) => {
     const decoded = await authUtils.decodeToken(token);
     if (!decoded) {
       return res.status(400).json({
-        status: "error",
-        message: "Token is invalid",
-        data: {},
+        error: true,
+        message: 'Token is invalid',
       });
     }
 
@@ -198,9 +192,8 @@ exports.resetPassword = async (req, res) => {
     const user = await userService.getUserByEmail(decoded.email);
     if (user.resetToken !== token) {
       return res.status(400).json({
-        status: "error",
-        message: "Token is invalid",
-        data: {},
+        error: true,
+        message: 'Token is invalid',
       });
     }
 
@@ -211,15 +204,13 @@ exports.resetPassword = async (req, res) => {
     await userService.updateUser(decoded.id, { password: hashPassword });
 
     res.status(200).json({
-      status: "success",
-      message: "Password reset successfully",
-      data: {},
+      error: false,
+      message: 'User Created',
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      error: true,
       message: err.message,
-      data: {},
     });
   }
 };
@@ -229,9 +220,8 @@ exports.logout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.status(400).json({
-        status: "error",
-        message: "Refresh token is required",
-        data: {},
+        error: true,
+        message: 'Refresh token is required',
       });
     }
     const user = await userService.getUserRefreshToken(refreshToken);
@@ -239,17 +229,15 @@ exports.logout = async (req, res) => {
       return res.status(204);
     }
     await userService.update({ id: user.id, resetToken: null });
-    res.clearCookie("refreshToken");
+    res.clearCookie('refreshToken');
     res.status(200).json({
-      status: "success",
-      message: "User logout successfully",
-      data: {},
+      error: false,
+      message: 'User logout successfully',
     });
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      error: true,
       message: err.message,
-      data: {},
     });
   }
 };

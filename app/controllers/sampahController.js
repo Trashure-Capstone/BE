@@ -5,7 +5,8 @@ class SampahController {
     try {
       const sampah = await sampahService.createNewSampah(req.body);
       res.status(201).json({
-        status: "success add sampah",
+        Error: false,
+        message: 'success add sampah',
         data: sampah,
       });
     } catch (err) {
@@ -19,12 +20,12 @@ class SampahController {
     try {
       const sampah = await sampahService.updateSampah(req.body, req.params.id);
       res.status(200).json({
-        status: "success update sampah",
-        data: sampah,
+        Error: false,
+        message: 'success update sampah',
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed update sampah",
+        Error: true,
         message: err.message,
       });
     }
@@ -33,12 +34,13 @@ class SampahController {
     try {
       const sampah = await sampahService.getAllSampah();
       res.status(200).json({
-        status: "success get all sampah",
+        Error: false,
+        message: 'success get all sampah',
         data: sampah,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed get all sampah",
+        Error: false,
         message: err.message,
       });
     }
@@ -47,12 +49,14 @@ class SampahController {
     try {
       const sampah = await sampahService.getSampahById(req.params.id);
       res.status(200).json({
-        status: "success get sampah by id",
+        Error: false,
+        message: 'success get sampah by id',
+        parameter: req.params.id,
         data: sampah,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed get sampah by id",
+        Error: true,
         message: err.message,
       });
     }
@@ -61,12 +65,12 @@ class SampahController {
     try {
       const sampah = await sampahService.deleteSampah(req.params.id);
       res.status(200).json({
-        status: "success delete sampah",
-        data: sampah,
+        Error: false,
+        message: 'success delete sampah',
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed delete sampah",
+        Error: true,
         message: err.message,
       });
     }

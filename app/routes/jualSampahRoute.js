@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const jualSampahController = require("../controllers/jualSampahController");
-const imgUpload = require('../controllers/uploadImgController');
+const imgUpload = require('../controllers/createJualSampahController');
 const authMiddleware = require('../middleware/authMiddleware');
 const MulterSampah = require("multer");
 
@@ -23,14 +23,15 @@ router.post(
     }
 
     res.send({
-      message: 'Upload was successful',
+      error: false,
+      message: 'Created successfully',
     });
   }
 );
 
-router.get("/", jualSampahController.getAllJualSampah);
-router.get("/:id", jualSampahController.getJualSampahById);
-router.put("/:id", jualSampahController.updateJualSampah);
-router.delete("/:id", jualSampahController.deleteJualSampah);
+router.get("/", authMiddleware.verifyToken,jualSampahController.getAllJualSampah);
+router.get("/:id", authMiddleware.verifyToken,jualSampahController.getJualSampahById);
+router.put("/:id", authMiddleware.verifyToken, jualSampahController.updateJualSampah);
+router.delete("/:id", authMiddleware.verifyToken,jualSampahController.deleteJualSampah);
 
 module.exports = router;

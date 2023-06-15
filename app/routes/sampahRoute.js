@@ -7,4 +7,5 @@ router.post("/", sampahController.createNewSampah);
 router.put("/:id", sampahController.updateSampah);
 router.delete("/:id", sampahController.deleteSampah);
 
+
 module.exports = router;

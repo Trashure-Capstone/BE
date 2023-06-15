@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Multer = require('multer');
-const imgUpload = require('../controllers/uploadImgController');
+const imgUpload = require('../controllers/createJualSampahController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const multer = Multer({

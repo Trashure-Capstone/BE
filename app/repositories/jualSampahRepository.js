@@ -4,13 +4,16 @@ class JualSampahRepository {
   async createJualSampah(data) {
     return await jual_sampah.create(data);
   }
-  async getAllJualSampah() {
-    return await jual_sampah.findAll();
+  async getAllJualSampah(id_user) {
+    return await jual_sampah.findAll({
+      where: {id_user: id_user},
+      order: [["updatedAt", "DESC"]],
+    });
   }
-  async getJualSampahById(id) {
+  async getJualSampahById(id_sampah) {
     return await jual_sampah.findOne({
       where: {
-        id: id,
+        id: id_sampah,
       },
     });
   }
