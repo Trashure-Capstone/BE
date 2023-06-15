@@ -5,12 +5,13 @@ class StatusController {
     try {
       const status = await statusService.getAllStatus();
       res.status(200).json({
-        status: "success get status",
+        error: false,
+        message: "success get status",
         data: status,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed get status",
+        error: true,
         message: err.message,
       });
     }
@@ -19,12 +20,12 @@ class StatusController {
     try {
       const status = await statusService.createStatus(req.body);
       res.status(201).json({
-        status: "success add status",
-        data: status,
+        error: false,
+        message: "success add status"
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed add status",
+        error: true,
         message: err.message,
       });
     }
@@ -36,12 +37,13 @@ class StatusController {
         req.params.id
       );
       res.status(200).json({
-        status: "success update status",
+        error: false,
+        message: "success update status",
         data: status,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed update status",
+        error: true,
         message: err.message,
       });
     }
@@ -50,12 +52,13 @@ class StatusController {
     try {
       const status = await statusService.deleteStatus(req.params.id);
       res.status(200).json({
-        status: "success delete status",
+        error: false,
+        message: "success delete status",
         data: status,
       });
     } catch (err) {
       res.status(400).json({
-        status: "failed delete status",
+        error: true,
         message: err.message,
       });
     }

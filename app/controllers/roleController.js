@@ -5,13 +5,14 @@ class RoleController {
     try {
       const data = await roleService.getAllRole();
       res.status(200).json({
-        data: data,
+        error: false,
         message: "Successfully get all role",
+        data: data,
       });
     } catch (error) {
       res.status(500).json({
-        message: "Server Error",
-        serverMessage: error,
+        error: true,
+        message: error.Message,
       });
     }
   }
@@ -19,11 +20,14 @@ class RoleController {
   async getRoleById(req, res) {
     try {
       const data = await roleService.getRoleById(req.params.id);
-      res.status(200).json(data);
+      res.status(200).json({
+        error: false,
+        message: "success get role by id",
+      });
     } catch (error) {
       res.status(500).json({
-        message: "Server Error",
-        serverMessage: error,
+        error: true,
+        message: error.Message,
       });
     }
   }
@@ -31,11 +35,14 @@ class RoleController {
   async createRole(req, res) {
     try {
       const data = await roleService.createRole(req.body);
-      res.status(201).json(data);
+      res.status(201).json({
+        error: false,
+        message: "success add role",
+      });
     } catch (error) {
       res.status(500).json({
-        message: "Server Error",
-        serverMessage: error,
+        error: true,
+        Message: error.Message,
       });
     }
   }
@@ -43,11 +50,14 @@ class RoleController {
   async updateRole(req, res) {
     try {
       const data = await roleService.updateRole(req.params.id, req.body);
-      res.status(200).json(data);
+      res.status(200).json({
+        error: false,
+        message: "success update role",
+      });
     } catch (error) {
       res.status(500).json({
-        message: "Server Error",
-        serverMessage: error,
+        error: true,
+        message: error.Message,
       });
     }
   }
@@ -55,11 +65,14 @@ class RoleController {
   async deleteRole(req, res) {
     try {
       const data = await roleService.deleteRole(req.params.id);
-      res.status(200).json(data);
+      res.status(200).json({
+        error: false,
+        message: "success delete role"
+      });
     } catch (error) {
       res.status(500).json({
-        message: "Server Error",
-        serverMessage: error,
+        error: true,
+        Message: error.Message,
       });
     }
   }
