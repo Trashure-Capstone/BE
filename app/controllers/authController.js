@@ -9,38 +9,34 @@ exports.register = async (req, res) => {
     // Check email and password empty
     if (!email || !password) {
       return res.status(400).json({
-        status: 'error',
+        error: true,
         message: 'Email and password required',
-        data: {},
       });
     }
     // Validasi email format
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
-        status: 'error',
+        error: true,
         message: 'Invalid email format',
-        data: {},
       });
     }
     // Check password format
-    const isPasswordFormatValid = await passwordUtils.checkPasswordFormat(
-      password
-    );
-    if (!isPasswordFormatValid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Password must be at least 8 characters long',
-        data: {},
-      });
-    }
+    // const isPasswordFormatValid = await passwordUtils.checkPasswordFormat(
+    //   password
+    // );
+    // if (!isPasswordFormatValid) {
+    //   return res.status(400).json({
+    //     error: true,
+    //     message: 'Password must be at least 8 characters long',
+    //   });
+    // }
     //check if email already registered
     const user = await userService.getUserByEmail(email);
     if (user) {
       return res.status(400).json({
-        status: 'error',
+        error: true,
         message: 'Email already registered',
-        data: {},
       });
     }
     // hash password
@@ -54,12 +50,12 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
     res.status(201).json({
-      status: 'success',
+      error: false,
       message: 'User created successfully',
     });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
+      error: true,
       message: err.message,
     });
   }
@@ -71,18 +67,16 @@ exports.login = async (req, res) => {
     // check email and password is not empty'
     if (!email || !password) {
       return res.status(400).json({
-        status: 'error',
+        error: true,
         message: 'Email and password is required',
-        data: {},
       });
     }
     // check if email already exist
     const user = await userService.getUserByEmail(email);
     if (!user) {
       return res.status(400).json({
-        status: 'error',
+        error: true,
         message: 'Email is not exist',
-        data: {},
       });
     }
     // check password
@@ -92,15 +86,14 @@ exports.login = async (req, res) => {
     );
     if (!isMatch) {
       return res.status(400).json({
-        status: 'error',
-        message: 'Password is incorrect',
-        data: {},
+        error: true,
+        message: 'Password is incorrect'
       });
     }
     // generate token
     const token = await authUtils.generateToken(user);
     res.status(200).json({
-      status: 'success',
+      error: false,
       message: 'User login successfully',
       data: {
         token: token,
@@ -108,9 +101,8 @@ exports.login = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      status: 'error',
-      message: err.message,
-      data: {},
+      error: true,
+      message: err.message
     });
   }
 };
