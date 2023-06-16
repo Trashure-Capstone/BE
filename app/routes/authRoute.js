@@ -15,5 +15,6 @@ router.post(
   authController.checkToken
 );
 router.post("/logout", authController.logout);
+router.post('/id:', authController.logout);
 
 module.exports = router;

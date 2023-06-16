@@ -31,7 +31,17 @@ router.post(
 
 router.get("/", authMiddleware.verifyToken,jualSampahController.getAllJualSampah);
 router.get("/:id", authMiddleware.verifyToken,jualSampahController.getJualSampahById);
-router.put("/:id", authMiddleware.verifyToken, jualSampahController.updateJualSampah);
-router.delete("/:id", authMiddleware.verifyToken,jualSampahController.deleteJualSampah);
+router.put(
+  '/:id',
+  authMiddleware.verifyToken,
+  authMiddleware.verifySuperAdmin,
+  jualSampahController.updateJualSampah
+);
+router.delete(
+  '/:id',
+  authMiddleware.verifyToken,
+  authMiddleware.verifySuperAdmin,
+  jualSampahController.deleteJualSampah
+);
 
 module.exports = router;
