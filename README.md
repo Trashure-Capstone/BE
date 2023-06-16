@@ -35,3 +35,6 @@ Konfigurasi aplikasi dapat ditemukan pada direktori `config`. Berkas `config.js`
 Sebelum menjalankan aplikasi, pastikan Anda telah mengatur variabel lingkungan yang dibutuhkan pada berkasa `.env`. Kemudian, Anda dapat menjalankan aplikasi dengan menjalankan perintah `npm start`. Aplikasi akan berjalan pada port yang telah ditentukan pada file `config.js`.
 
 Untuk menguji aplikasi, Anda dapat menjalankan perintah `npm test`. Aplikasi akan diuji menggunakan file tes yang terdapat pada direktori `test`.
+
+## Dokumentasi API
+https://documenter.getpostman.com/view/20046004/2s93shz9bv
