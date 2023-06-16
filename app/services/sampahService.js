@@ -13,6 +13,9 @@ class SampahService {
   async getSampahById(id) {
     return await sampahRepository.getSampahById(id);
   }
+  async getSampahByName(name) {
+    return await sampahRepository.getSampahByName(name);
+  }
 
   async deleteSampah(id) {
     return await sampahRepository.deleteSampah(id);

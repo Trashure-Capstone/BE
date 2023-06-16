@@ -14,6 +14,13 @@ class SampahRepository {
       },
     });
   }
+  async getSampahByName(name) {
+    return await sampah.findOne({
+      where: {
+        nama: name,
+      },
+    });
+  }
   async updateSampah(data, id) {
     return await sampah.update(data, {
       where: {
