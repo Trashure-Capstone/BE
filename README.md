@@ -1,40 +1,39 @@
-## Daftar Isi
-- [Struktur Folder](#struktur-folder)
-- [Konfiguras Aplikasi](#konfigurasi-aplikasi)
-- [Penggunaan Aplikasi](#penggunaan-aplikasi)
+##Table of Contents
+-[Folder Structure](#structure-folder)
+-[Application Configuration](#Application-Configuration)
+-[Application Usage](#Application-Usage)
+-[API Documentation](#API-Documentation)
 
+##Folder Structure
+- `app`: Directory that contains the application code.
+- `controllers`: Directory that contains Express controllers.
+- `models`: Directory that contains Sequelize model definitions.
+- `repositories`: Directory that contains repositories used to access the database.
+- `routes`: Directory that contains Express route definitions.
+- `services`: Directory that contains business logic.
+- `utils`: Directory that contains utility functions used in the application.
+- `config`: Directory that contains application configuration.
+- `config.js`: File that contains general configuration.
+- `db.js`: File that contains database connection configuration.
+- `server.js`: File that contains HTTP server configuration.
+- `migrations`: Directory that contains Sequelize database migration definitions.
+- `node_modules`: Directory that contains Node.js dependencies.
+- `test`: Directory that contains test files.
+- `.env`: File that contains environment variables for the application.
+- `.gitignore`: File that contains a list of files and directories ignored by Git.
+- `package.json`: Node.js project configuration file.
+- `README.md`: File that contains project description and documentation.
 
+##Application Configuration
 
-## Struktur Folder
+Application configuration can be found in the config directory. The config.js file contains general configuration such as the application port, while db.js contains the database connection configuration. The server.js file contains the configuration for the HTTP server, including middleware and route definitions.
 
-- `app`: Direktori yang berisi kode aplikasi.
-  - `controllers`: Direktori yang berisi kontroler Express.
-  - `models`: Direktori yang berisi definisi model Sequelize.
-  - `repositories`: Direktori yang berisi repository yang digunakan untuk mengakses database.
-  - `routes`: Direktori yang berisi definisi rute Express.
-  - `services`: Direktori yang berisi logika bisnis.
-  - `utils`: Direktori yang berisi utilitas yang digunakan dalam aplikasi.
-- `config`: Direktori yang berisi konfigurasi aplikasi.
-  - `config.js`: Berkas yang berisi konfigurasi umum.
-  - `db.js`: Berkas yang berisi konfigurasi koneksi database.
-  - `server.js`: Berkas yang berisi konfigurasi server HTTP.
-- `migrations`: Direktori yang berisi definisi migrasi database Sequelize.
-- `node_modules`: Direktori yang berisi dependensi Node.js.
-- `test`: Direktori yang berisi file tes.
-- `.env`: Berkas yang berisi variabel lingkungan aplikasi.
-- `.gitignore`: Berkas yang berisi daftar file dan direktori yang diabaikan oleh Git.
-- `package.json`: Berkas konfigurasi proyek Node.js.
-- `README.md`: Berkas yang berisi deskripsi proyek dan dokumentasi.
+##Application Usage
 
-## Konfigurasi Aplikasi
+Before running the application, make sure you have set the required environment variables in the .env file. Then, you can run the application by executing the npm start command. The application will run on the port specified in the config.js file.
 
-Konfigurasi aplikasi dapat ditemukan pada direktori `config`. Berkas `config.js` berisi konfigurasi umum seperti port aplikasi, sedangkan `db.js` berisi konfigurasi koneksi database. Berkas `server.js` berisi konfigurasi server HTTP, seperti middleware dan definisi rute.
+To test the application, you can run the npm test command. The application will be tested using the test files located in the test directory.
 
-## Penggunaan Aplikasi
+##API Documentation
 
-Sebelum menjalankan aplikasi, pastikan Anda telah mengatur variabel lingkungan yang dibutuhkan pada berkasa `.env`. Kemudian, Anda dapat menjalankan aplikasi dengan menjalankan perintah `npm start`. Aplikasi akan berjalan pada port yang telah ditentukan pada file `config.js`.
-
-Untuk menguji aplikasi, Anda dapat menjalankan perintah `npm test`. Aplikasi akan diuji menggunakan file tes yang terdapat pada direktori `test`.
-
-## Dokumentasi API
-https://documenter.getpostman.com/view/20046004/2s93shz9bv
+Please refer to the following link for detailed API documentation: [API Documentation](https://documenter.getpostman.com/view/20046004/2s93shz9bv)
